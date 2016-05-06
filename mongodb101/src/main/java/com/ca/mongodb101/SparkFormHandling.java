@@ -42,7 +42,7 @@ public class SparkFormHandling {
 			public Object handle(final Request request, final Response response) {
 				final String fruit = request.queryParams("fruit");
 				if (fruit == null) {
-					return "Why don't you pick one?";
+					return "Why don't you pick one, I know you want to?";
 				} else {
 					return "Hey, your facorite fruit is " + fruit;
 				}
