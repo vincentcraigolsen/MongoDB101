@@ -1,0 +1,109 @@
+
+CRUD:
+
+db terms - Mongo - SQL:
+
+Create - Insert - Insert
+Read - Find - Select
+Update - Update - Update
+Delete - Remove - Delete
+
+MongoShell is an interactive javascript interpreter
+
+for(i=0;i<3;i++) print("hello " + i);
+
+mongo - connects to the mongo server
+
+help - help topics
+
+input into mongo shell javascript objects
+
+
+mongo stores bianary json BSON
+
+Integer constructor:
+NumberInt(1) gives you a 32 bit value
+
+Long constructor:
+NumberLong(1) gives you a 64 bit value
+
+new Date()
+IsoDate("2012-10-21T17:41:58.389Z")
+
+adding ints and longs may not 
+
+
+Insert a document into the people database:
+db.people.insert( doc )
+
+
+Finds one record from the collection:
+db.people.findOne()
+
+where criteria:
+db.people.findOne({"name":"Jones"})
+
+second document criteria determines which fields (columns) to return:
+db.people.findOne({"name":"Jones"}, {"name" : true, "_id" : false})
+
+
+for (i=0; i<1000; i++) {
+	names=["exam", "essay", "quiz"]; 
+	for (j=0; j<3; j++){
+		db.scores.insert({"student":i,"type":names[j], score:Math.round(Math.random()*100)});
+		}
+	}
+
+	
+query:
+db.scores.find({ type:"essay", score:50}, {student:true,_id:false});
+
+
+greater than query:
+db.scores.find({score:{$gt:95}})
+
+less than or equal to query:
+db.scores.find({score:{$gt:95, $lte:98}, type:"essay"})
+
+comparison using strings:
+db.people.find({name:{$lt:"D"}});
+db.people.find({name:{$lt:"D",$gt:"B"}});
+comparisons will not cross data types
+
+where non null:
+db.people.find({profession:{$exists:true}});
+db.people.find({profession:{$exists:1}});
+
+where null:
+db.people.find({profession:{$exists:false}});
+db.people.find({profession:{$exists:0}});
+
+where like (pearl regex):
+db.people.find({name:{$regex:"a"}});
+db.people.find({name:{$regex:"e$"}});
+db.people.find({name:{$regex:"^A"}});
+
+
+joining queries:
+db.people.find({$or:[{name:{$regex:"e$"}}, {age:{$exists:1}}]});
+db.scores.find({$or:[{score:{$lt:50}},{score:{$gt:90}}]});
+
+db.people.find({$and:[{name:{$gt:"C"}},{name:{regex:"a"}}]});
+db.people.find({name:{$gt:"C",$regex:"a"}});
+
+second occurance of a field in a javascript object overwrites the first occurance:
+db.scores.find( { score : { $gt : 50 }, score : { $lt : 60 } } );
+finds all documents with a score less than 60
+
+
+db.accounts.insert({name:"Howard",favorites:["pretzels","rootbeer"]});
+db.accounts.insert({name:"George",favorites:["ice cream", "pretzels"]});
+db.accounts.find({favorites:"pretzels"}).pretty()
+db.accounts.find({favorites:"ice cream"}).pretty()
+
+
+
+
+
+
+
