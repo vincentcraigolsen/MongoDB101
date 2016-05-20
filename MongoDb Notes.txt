@@ -102,7 +102,112 @@ db.accounts.find({favorites:"pretzels"}).pretty()
 db.accounts.find({favorites:"ice cream"}).pretty()
 
 
+db.users.find( { friends : { $all : [ "Joe" , "Bob" ] }, favorites : { $in : [ "running" , "pickles" ] } } )
 
+
+$ oppereator is the query opperator, if you do not use this, the order of the documents matters
+
+
+dot notation:
+db.users.find({"email.work": "user@gmail.com"}); searches email and then the embedded document work recursively
+reaches inside nested objects
+
+example of dot notation:
+{ product : "Super Duper-o-phonic", 
+  price : 100000000000,
+  reviews : [ { user : "fred", comment : "Great!" , rating : 5 },
+              { user : "tom" , comment : "I agree with Fred, somewhat!" , rating : 4 } ],
+  ... }
+db.catalog.find({"price":{$gt:10000}, "reviews.rating":{$gte:5}});  
+
+
+db.people.find() returns a cursor to the console
+
+cur = db.people.find(); null;
+
+gets the next row:
+cur.next()
+
+while (cur.hasNext())printjson(cur.next());
+
+return the specified number of entries, and the cursor
+cur.limit(5); null;
+
+
+return the cursor in order by name, and then the cursor
+cur.sort({name:-1});null;
+
+nested methods:
+cur.sort({name:-1}).limit(3).skip(2);null;
+
+
+count command:
+db.scores.count({type:"exam"});
+db.scores.count({type:"essay",score:{$gt:90}});
+
+
+Updates:
+Update whole document:
+db.people.update({name:"Smith"},{name:"Thompson", salary:50000});
+
+update just one field using $ operator:
+db.people.update({name:"Alice"},{$set:{age:31}});
+
+increment a field:
+db.people.update({name:"Bob", {$inc{age:1}});
+
+unset a field:
+db.people.update({name:"Jones"},{$unset:{profession:1}});
+
+
+Update arrays:
+replace the second element of an array:
+db.arrays.update({_id:0},{$set:{"a.2":5}});
+
+add elements to an array:
+db.arrays.update({_id:0},{$push:{a:6}});
+
+remove the right most element from an array:
+db.arrays.update({_id:0},{$pop:{a:1}});
+
+remove the left most element from an array:
+db.arrays.update({_id:0},{$pop:{a:-1}});
+
+add a number of elements to an array:
+db.arrays.update({_id:0},{$pushAll:{a:[6,3,2]}});
+
+remove a value regardless of position from an array:
+db.arrays.update({_id:0},{$pull:{a:5}});
+db.arrays.update({_id:0},{$pullALL:{a:[5,2,3]}});
+
+treat array like a set:
+db.arrays.update({_id:0},{$addToSet:{a:5}});
+
+
+Upsert (update a document that exists or inserts is):
+db.people.update({name:"George"},{$set:{age:50}},{upsert:true})
+
+
+update all:
+db.people.update({},{$set:{title:"Dr"}},{multi:true});
+without multi:true, updates only one document, underdefined
+
+
+write operations are not atomic or isolated from other read-write operations
+
+
+Remove:
+db.people.remove({name:{$gt:"M"}});
+
+remove all:
+db.people.remove({})
+one by one update of each document in the collection
+
+drop:
+db.people.drop()
+
+
+collection.updateOne(eq("x",5), new Document("$set", new Document("x",20)), new UpdateOptions().upsert(true));
 
 
 
